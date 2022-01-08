@@ -56,6 +56,4 @@ export const TicTacToe = {
             return moves;
         },
     },
-
-
 };
