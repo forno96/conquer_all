@@ -14,12 +14,6 @@ const App = () => (
   <div>
     <p>Player 0</p>
     <ConquerClient playerID="0" matchID='123'/>
-    <br/>
-    <p>Player 1</p>
-    <ConquerClient playerID="1" matchID='123'/>
-    <br/>
-    <p>Spect</p>
-    <ConquerClient playerID="spect" matchID='123'/>
   </div>
 );
 
