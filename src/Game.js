@@ -19,7 +19,7 @@ function IsDraw(cells) {
     return cells.filter(c => c === null).length === 0;
 }
 
-export const TicTacToe = {
+export const Conquer = {
     setup: () => ({ cells: Array(9).fill(null) }),
 
     turn: {

@@ -1,25 +1,25 @@
 import React from 'react';
 import { Client } from 'boardgame.io/react';
 import { SocketIO } from 'boardgame.io/multiplayer'
-import { TicTacToe } from './Game';
-import { TicTacToeBoard } from './Board';
+import { Conquer } from './Game';
+import { ConquerBoard } from './Board';
 
-const TicTacToeClient = Client({
-  game: TicTacToe,
-  board: TicTacToeBoard,
+const ConquerClient = Client({
+  game: Conquer,
+  board: ConquerBoard,
   multiplayer: SocketIO({ server: 'localhost:8000' }),
 });
 
 const App = () => (
   <div>
     <p>Player 0</p>
-    <TicTacToeClient playerID="0" />
+    <ConquerClient playerID="0" matchID='123'/>
     <br/>
     <p>Player 1</p>
-    <TicTacToeClient playerID="1" />
+    <ConquerClient playerID="1" matchID='123'/>
     <br/>
     <p>Spect</p>
-    <TicTacToeClient playerID="spect" />
+    <ConquerClient playerID="spect" matchID='123'/>
   </div>
 );
 
