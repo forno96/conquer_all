@@ -12,7 +12,6 @@ const ConquerClient = Client({
 
 const App = () => (
   <div>
-    <p>Player 0</p>
     <ConquerClient playerID="0" matchID='123'/>
   </div>
 );
