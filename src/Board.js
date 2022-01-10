@@ -1,7 +1,8 @@
 import React from 'react';
-import { Contintents, Lines } from './Map';
+import { Contintents, Lines } from "./Map";
 
 export class ConquerBoard extends React.Component {
+
     onClick(state) {
         console.log(state.country);
         //this.props.moves.clickCell(id);
@@ -9,20 +10,16 @@ export class ConquerBoard extends React.Component {
     onMouseOver(state){
         document.getElementById(state.country).style.fill = "#FFFFFF";
         document.getElementById("countyLabel").textContent = state.country;
-        if ("connections" in  state) {
-            document.getElementById("countryConnections").textContent = Array.from(state.connections).join(', ');
-            state.connections.forEach((connection)=>{
-                document.getElementById(connection).style.fill = "#7a7a7a";
-            })
-        }
-        else {
-            document.getElementById("countryConnections").textContent = ""
-        }
+        
+        // document.getElementById("countryConnections").textContent = Array.from(state.connections).join(', ');
+        state.connections.forEach((connection)=>{
+            document.getElementById(connection).style.fill = "#7a7a7a";
+        })
     }
     onMouseOut(state){
         document.getElementById(state.country).style.fill = ""
         if ("connections" in state) {
-            document.getElementById("countryConnections").textContent = Array.from(state.connections).join(', ');
+            // document.getElementById("countryConnections").textContent = Array.from(state.connections).join(', ');
             state.connections.forEach((connection) => {
                 document.getElementById(connection).style.fill = "";
             })
@@ -68,15 +65,21 @@ export class ConquerBoard extends React.Component {
                     </div>
                 </div>
                 <div className="columns">
-                    <div className="column is-8">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1050 670">
-                            <g id="map" visibility="visible" fill="none" strokeWidth="2.5">
-                                {conntectedLines}
-                                {conts}
-                            </g>
-                        </svg>
+                    <div className="column is-9">
+                        <div className="box">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1035 660">
+                                <g id="map" visibility="visible" fill="none" strokeWidth="2.5">
+                                    {conntectedLines}
+                                    {conts}
+                                </g>
+                            </svg>
+                        </div>
                     </div>
-                    <div className="column">Controls</div>
+                    <div className="column">
+                        <div className="box">
+                            Controls
+                        </div>
+                    </div>
                 </div>
             </div>
         );

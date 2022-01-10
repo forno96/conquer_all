@@ -1,4 +1,18 @@
 import { INVALID_MOVE } from 'boardgame.io/core';
+import { Contintents } from "./Map";
+
+var MapState = {};
+for (let continent in Contintents){
+    MapState[continent] = {
+        "states": []
+    };
+    
+    Contintents[continent]["states"].forEach((state) => {
+        MapState[continent]["states"].push({
+            "country": state.country
+        });
+    }); 
+}
 
 function IsVictory(cells) {
     const positions = [
@@ -20,7 +34,10 @@ function IsDraw(cells) {
 }
 
 export const Conquer = {
-    setup: () => ({ cells: Array(9).fill(null) }),
+    setup: () => ({ 
+        cells: Array(9).fill(null),
+        MapState: MapState
+    }),
 
     turn: {
         minMoves: 1,
