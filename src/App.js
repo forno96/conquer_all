@@ -10,6 +10,8 @@ const ConquerClient = Client({
   multiplayer: SocketIO({ server: 'localhost:8000' }),
 });
 
+document.children[0].style["overflowY"] = "auto";
+
 const App = () => (
   <div>
     <ConquerClient playerID="0" matchID='123'/>
