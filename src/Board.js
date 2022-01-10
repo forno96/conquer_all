@@ -2,16 +2,31 @@ import React from 'react';
 import { Contintents, Lines } from './Map';
 
 export class ConquerBoard extends React.Component {
-    onClick(id) {
-        console.log(id);
+    onClick(state) {
+        console.log(state.country);
         //this.props.moves.clickCell(id);
     }
-    onMouseOver(id){
-        document.getElementById(id).style.fill = "#FFFFFF";
-        document.getElementById("countyLabel").textContent = id;
+    onMouseOver(state){
+        document.getElementById(state.country).style.fill = "#FFFFFF";
+        document.getElementById("countyLabel").textContent = state.country;
+        if ("connections" in  state) {
+            document.getElementById("countryConnections").textContent = Array.from(state.connections).join(', ');
+            state.connections.forEach((connection)=>{
+                document.getElementById(connection).style.fill = "#7a7a7a";
+            })
+        }
+        else {
+            document.getElementById("countryConnections").textContent = ""
+        }
     }
-    onMouseOut(id){
-        document.getElementById(id).style.fill = ""
+    onMouseOut(state){
+        document.getElementById(state.country).style.fill = ""
+        if ("connections" in state) {
+            document.getElementById("countryConnections").textContent = Array.from(state.connections).join(', ');
+            state.connections.forEach((connection) => {
+                document.getElementById(connection).style.fill = "";
+            })
+        }
         //document.getElementById("countyLabel").textContent = "";
     }
     
@@ -21,7 +36,7 @@ export class ConquerBoard extends React.Component {
             let tmp = [];
             Contintents[cont].states.forEach(state => {
                 tmp.push(
-                    <path className='country' id={state.country} d={state.geometry} onClick={() => this.onClick(state.country)} onMouseOver={() => this.onMouseOver(state.country)} onMouseOut={() => this.onMouseOut(state.country)}  />
+                    <path className='country' id={state.country} d={state.geometry} onClick={() => this.onClick(state)} onMouseOver={() => this.onMouseOver(state)} onMouseOut={() => this.onMouseOut(state)}  />
                 );
             });
             conts.push(
@@ -31,7 +46,7 @@ export class ConquerBoard extends React.Component {
             );
         }
 
-        console.log(Lines)
+        //console.log(Lines)
         let conntectedLines = [];
         Lines.forEach((line)=>{
             //console.log(line)
@@ -42,8 +57,16 @@ export class ConquerBoard extends React.Component {
 
         return (
             <div className="container is-fullhd">
-                <p className="is-size-4">Player ID: <span className="has-text-info has-text-weight-bold">{this.props.playerID}</span></p>
-                <p>State: <span id="countyLabel" className="has-text-info"></span></p>
+                <div className="columns">
+                    <div className="column">
+                        <p className="is-size-4">Player ID: <span className="has-text-info has-text-weight-bold">{this.props.playerID}</span></p>
+                        <p>State: <span id="countyLabel" className="has-text-info"></span></p>
+                        <div id="countryConnections"></div>
+                    </div>
+                    <div className="column">
+                        <p className="is-size-4">Game session: <span className="has-text-info has-text-weight-bold">{this.props.matchID}</span></p>
+                    </div>
+                </div>
                 <div className="columns">
                     <div className="column is-8">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1050 670">
