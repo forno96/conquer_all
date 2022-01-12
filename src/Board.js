@@ -29,12 +29,34 @@ export class ConquerBoard extends React.Component {
     
     render() {
         let conts = [];
+        let armies = [];
         for (let cont in Contintents) {
             let tmp = [];
             Contintents[cont].states.forEach(state => {
                 tmp.push(
-                    <path className='country' id={state.country} d={state.geometry} onClick={() => this.onClick(state)} onMouseOver={() => this.onMouseOver(state)} onMouseOut={() => this.onMouseOut(state)}  />
+                    <path className='country' id={state.country} d={state.geometry} onClick={() => this.onClick(state)} onMouseOver={() => this.onMouseOver(state)} onMouseOut={() => this.onMouseOut(state)} />
                 );
+                if ("army_pos" in state) {
+                    armies.push(
+                        <text 
+                            id={state.country + "_label"}
+                            x={state.army_pos.x} y={state.army_pos.y}
+                            style={{
+                                "font-size": "1.5em",
+                                "fill": "#000000",
+                                "user-select": "none",
+                                "font-family": "PT Mono",
+                                "paint-order": "stroke",
+                                "stroke": "#fbfbfb",
+                                "stroke-width": "5px",
+                                "stroke-linecap": "butt",
+                                "stroke-linejoin": "miter"
+                            }} onClick={() => this.onClick(state)} onMouseOver={() => this.onMouseOver(state)} onMouseOut={() => this.onMouseOut(state)}>0</text>
+                    );
+                }
+                else {
+                    console.log(state);
+                }
             });
             conts.push(
                 <g id={cont} stroke={Contintents[cont].stroke} fill="#E5E5E5">
@@ -71,6 +93,7 @@ export class ConquerBoard extends React.Component {
                                 <g id="map" visibility="visible" fill="none" strokeWidth="2.5">
                                     {conntectedLines}
                                     {conts}
+                                    {armies}
                                 </g>
                             </svg>
                         </div>
