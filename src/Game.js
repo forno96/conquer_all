@@ -9,9 +9,11 @@ for (let continent in Contintents){
     
     Contintents[continent]["states"].forEach((state) => {
         MapState[continent]["states"].push({
-            "country": state.country
+            "country": state.country,
+            "arms": 0,
+            "playerID": null
         });
-    }); 
+    });
 }
 
 function IsVictory(cells) {

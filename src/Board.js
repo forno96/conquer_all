@@ -1,6 +1,21 @@
 import React from 'react';
 import { Contintents, Lines } from "./Map";
 
+function showCurrentArmies(MapState) {
+    for (let contKey in MapState) {
+        MapState[contKey].states.forEach(state => {
+            let labelEL = document.getElementById(state.country + '_label')
+            if (labelEL != null) {
+                labelEL.textContent = 0;
+            }
+        })
+    }
+}
+
+function showCurrentGameState(G) {
+    showCurrentArmies(G.MapState)
+}
+
 export class ConquerBoard extends React.Component {
 
     onClick(state) {
@@ -36,27 +51,26 @@ export class ConquerBoard extends React.Component {
                 tmp.push(
                     <path className='country' id={state.country} d={state.geometry} onClick={() => this.onClick(state)} onMouseOver={() => this.onMouseOver(state)} onMouseOut={() => this.onMouseOut(state)} />
                 );
-                if ("army_pos" in state) {
-                    armies.push(
-                        <text 
-                            id={state.country + "_label"}
-                            x={state.army_pos.x} y={state.army_pos.y}
-                            style={{
-                                "font-size": "1.5em",
-                                "fill": "#000000",
-                                "user-select": "none",
-                                "font-family": "PT Mono",
-                                "paint-order": "stroke",
-                                "stroke": "#fbfbfb",
-                                "stroke-width": "5px",
-                                "stroke-linecap": "butt",
-                                "stroke-linejoin": "miter"
-                            }} onClick={() => this.onClick(state)} onMouseOver={() => this.onMouseOver(state)} onMouseOut={() => this.onMouseOut(state)}>0</text>
-                    );
-                }
-                else {
-                    console.log(state);
-                }
+                armies.push(
+                    <text 
+                        id={state.country + "_label"}
+                        x={state.army_pos.x} y={state.army_pos.y}
+                        style={{
+                            "fontSize": "1.5em",
+                            "fill": "#000000",
+                            "userSelect": "none",
+                            "fontFamily": "PT Mono",
+                            "paintOrder": "stroke",
+                            "stroke": "#fbfbfb",
+                            "strokeWidth": "5px",
+                            "strokeLinecap": "butt",
+                            "strokeLinejoin": "miter"
+                        }}
+                        onClick={() => this.onClick(state)}
+                        onMouseOver={() => this.onMouseOver(state)}
+                        onMouseOut={() => this.onMouseOut(state)}>
+                    </text>
+                );
             });
             conts.push(
                 <g id={cont} stroke={Contintents[cont].stroke} fill="#E5E5E5">
@@ -73,7 +87,6 @@ export class ConquerBoard extends React.Component {
                 <line stroke="#000000" strokeDasharray="6,6" x1={line.x1} y1={line.y1} x2={line.x2} y2={line.y2}/>
             );
         })
-
         return (
             <div className="container is-fullhd">
                 <div className="columns">
@@ -104,6 +117,7 @@ export class ConquerBoard extends React.Component {
                         </div>
                     </div>
                 </div>
+                {showCurrentGameState(this.props.G) }
             </div>
         );
     }
