@@ -1,30 +1,15 @@
 import React from 'react';
 import { Contintents, Lines } from "./Map";
 
-function showCurrentArmies(MapState) {
-    for (let contKey in MapState) {
-        MapState[contKey].states.forEach(state => {
-            let labelEL = document.getElementById(state.country + '_label')
-            if (labelEL != null) {
-                labelEL.textContent = 0;
-            }
-        })
-    }
-}
-
-function showCurrentGameState(G) {
-    showCurrentArmies(G.MapState)
-}
-
 export class ConquerBoard extends React.Component {
 
     onClick(state) {
-        console.log(state.country);
-        //this.props.moves.clickCell(id);
+        console.log("Playes click " + state.country);
+        // this.props.moves.clickCell(id);
     }
     onMouseOver(state){
         document.getElementById(state.country).style.fill = "#FFFFFF";
-        document.getElementById("countyLabel").textContent = state.country;
+        // document.getElementById("countyLabel").textContent = state.country;
         
         // document.getElementById("countryConnections").textContent = Array.from(state.connections).join(', ');
         state.connections.forEach((connection)=>{
@@ -47,7 +32,7 @@ export class ConquerBoard extends React.Component {
         let armies = [];
         for (let cont in Contintents) {
             let tmp = [];
-            Contintents[cont].states.forEach(state => {
+            Contintents[cont].states.forEach((state, i) => {
                 tmp.push(
                     <path className='country' id={state.country} d={state.geometry} onClick={() => this.onClick(state)} onMouseOver={() => this.onMouseOver(state)} onMouseOut={() => this.onMouseOut(state)} />
                 );
@@ -69,6 +54,9 @@ export class ConquerBoard extends React.Component {
                         onClick={() => this.onClick(state)}
                         onMouseOver={() => this.onMouseOver(state)}
                         onMouseOut={() => this.onMouseOut(state)}>
+
+                        { this.props.G.MapState[cont].states[i].army }
+
                     </text>
                 );
             });
@@ -87,15 +75,30 @@ export class ConquerBoard extends React.Component {
                 <line stroke="#000000" strokeDasharray="6,6" x1={line.x1} y1={line.y1} x2={line.x2} y2={line.y2}/>
             );
         })
+        
+        let playComponent = [];
+        for (let i in this.props.ctx.playOrder){
+            let el = null;
+            if (i == this.props.ctx.playOrderPos) {
+                el = <span className="tag is-large is-info" id={"player_turn_" + i}>{i}</span>
+            }
+            else {
+                el = <span className="tag is-large is-info is-light" id={"player_turn_" + i}>{i}</span>
+            }
+            playComponent.push(el);
+        }
+
         return (
-            <div className="container is-fullhd">
-                <div className="columns">
-                    <div className="column">
+            <div className="container is-fullhd mt-1">
+                <div className="columns mb-0">
+                    <div className="column is-unselectable">
+                        {playComponent }
+                    </div>
+                    <div className="column is-narrow">
                         <p className="is-size-4">Player ID: <span className="has-text-info has-text-weight-bold">{this.props.playerID}</span></p>
-                        <p>State: <span id="countyLabel" className="has-text-info"></span></p>
                         <div id="countryConnections"></div>
                     </div>
-                    <div className="column">
+                    <div className="column is-narrow">
                         <p className="is-size-4">Game session: <span className="has-text-info has-text-weight-bold">{this.props.matchID}</span></p>
                     </div>
                 </div>
@@ -113,11 +116,14 @@ export class ConquerBoard extends React.Component {
                     </div>
                     <div className="column">
                         <div className="box">
-                            Controls
+                            <p className="is-size-4">Controls</p>
+                            <button className="button is-danger is-fullwidth" onClick={() => this.props.events.endTurn()}>End Turn</button>
                         </div>
                     </div>
                 </div>
-                {showCurrentGameState(this.props.G) }
+                <div className="box mb-2">
+                    <p className="is-size-4" id="msg-box"></p>
+                </div>
             </div>
         );
     }
