@@ -4,8 +4,8 @@ import { Contintents, Lines } from "./Map";
 export class ConquerBoard extends React.Component {
 
     onClick(state) {
-        console.log("Playes click " + state.country);
-        // this.props.moves.clickCell(id);
+        console.log("Player click " + state.country);
+        this.props.moves.PutArmy(state.country);
     }
     onMouseOver(state){
         document.getElementById(state.country).style.fill = "#FFFFFF";
@@ -88,6 +88,16 @@ export class ConquerBoard extends React.Component {
             playComponent.push(el);
         }
 
+        let message = "";
+        if (this.props.ctx.phase == "placeArmies"){
+            if (this.props.ctx.playOrderPos == this.props.playerID) {
+                message = "Put one army on one of your country"
+            }
+            else {
+                message = "Wait for your turn for place army"
+            }
+        }
+
         return (
             <div className="container is-fullhd mt-1">
                 <div className="columns mb-0">
@@ -122,7 +132,9 @@ export class ConquerBoard extends React.Component {
                     </div>
                 </div>
                 <div className="box mb-2">
-                    <p className="is-size-4" id="msg-box"></p>
+                    <p className="is-size-5 has-text-justified" id="msg-box">
+                        { message }
+                    </p>
                 </div>
             </div>
         );
