@@ -10,57 +10,56 @@ for (let continent in Contintents){
     Contintents[continent]["states"].forEach((state) => {
         MapState[continent]["states"].push({
             "country": state.country,
-            "arms": 0,
+            "army": 1,
             "playerID": null
         });
     });
 }
 
-function IsVictory(cells) {
-    const positions = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6],
-        [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]
-    ];
-
-    const isRowComplete = row => {
-        const symbols = row.map(i => cells[i]);
-        return symbols.every(i => i !== null && i === symbols[0]);
-    };
-
-    return positions.map(isRowComplete).some(i => i === true);
+function IsVictory() {
+    return false;
 }
 
-// Return true if all `cells` are occupied.
-function IsDraw(cells) {
-    return cells.filter(c => c === null).length === 0;
+function PutArmy(G, ctx) {
+
+}
+
+function PlayCard(G, ctx) {
+    
 }
 
 export const Conquer = {
     setup: () => ({ 
-        cells: Array(9).fill(null),
-        MapState: MapState
+        MapState: MapState,
+        Player: {
+            "0":{
+                armies: 10
+            },
+            "1":{
+                armies: 10
+            }
+        }
     }),
 
-    turn: {
-        minMoves: 1,
-        maxMoves: 1,
-    },
+    turn: {},
 
-    moves: {
-        clickCell: (G, ctx, id) => {
-            if (G.cells[id] !== null) {
-                return INVALID_MOVE;
-            }
-            G.cells[id] = ctx.currentPlayer;
-        }
+    phases: {
+        placeArmies: {
+            moves: { PutArmy },
+            endIf: G => (G.deck <= 0),
+            turn: { minMoves: 1, maxMoves: 1 },
+            start: true,
+            next: 'play',
+        },
+
+        play: {
+            moves: { PlayCard },
+        },
     },
 
     endIf: (G, ctx) => {
-        if (IsVictory(G.cells)) {
+        if (IsVictory()) {
             return { winner: ctx.currentPlayer };
-        }
-        if (IsDraw(G.cells)) {
-            return { draw: true };
         }
     },
     
