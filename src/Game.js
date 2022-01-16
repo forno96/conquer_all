@@ -2,18 +2,24 @@ import { INVALID_MOVE } from 'boardgame.io/core';
 import { Contintents } from "./Map";
 
 var MapState = {};
-for (let continent in Contintents){
-    MapState[continent] = {
-        "states": []
+for (let contKey in Contintents){
+    MapState[contKey] = {
+        "states": {}
     };
     
-    Contintents[continent]["states"].forEach((state) => {
-        MapState[continent]["states"].push({
-            "country": state.country,
-            "army": 1,
-            "playerID": null
-        });
-    });
+    for (let stateKey in Contintents[contKey]["states"]){
+        let state = Contintents[contKey][stateKey];
+        MapState[contKey]["states"][stateKey] = {
+            country: stateKey,
+            continent: contKey,
+            army: 1,
+            playerID: null
+        };
+    }
+}
+
+function incrementArmy(G, ctx, stateKey, contKey) {
+    G.MapState[contKey]["states"][stateKey].army += 1
 }
 
 function IsVictory() {

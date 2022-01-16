@@ -5,7 +5,7 @@ export class ConquerBoard extends React.Component {
 
     onClick(state) {
         console.log("Player click " + state.country);
-        this.props.moves.PutArmy(state.country);
+        this.props.moves.PutArmy(state.country, state.continent);
     }
     onMouseOver(state){
         document.getElementById(state.country).style.fill = "#FFFFFF";
@@ -32,9 +32,12 @@ export class ConquerBoard extends React.Component {
         let armies = [];
         for (let cont in Contintents) {
             let tmp = [];
-            Contintents[cont].states.forEach((state, i) => {
+            let i = 0;
+            for (let stateKey in Contintents[cont].states){
+                let state = Contintents[cont].states[stateKey];
+
                 tmp.push(
-                    <path className='country' id={state.country} d={state.geometry} onClick={() => this.onClick(state)} onMouseOver={() => this.onMouseOver(state)} onMouseOut={() => this.onMouseOut(state)} />
+                    <path className='country' id={stateKey} d={state.geometry} onClick={() => this.onClick(state)} onMouseOver={() => this.onMouseOver(state)} onMouseOut={() => this.onMouseOut(state)} />
                 );
                 armies.push(
                     <text 
@@ -55,11 +58,12 @@ export class ConquerBoard extends React.Component {
                         onMouseOver={() => this.onMouseOver(state)}
                         onMouseOut={() => this.onMouseOut(state)}>
 
-                        { this.props.G.MapState[cont].states[i].army }
+                        {this.props.G.MapState[cont].states[stateKey].army }
 
                     </text>
                 );
-            });
+                i++;
+            };
             conts.push(
                 <g id={cont} stroke={Contintents[cont].stroke} fill="#E5E5E5">
                     {tmp}
