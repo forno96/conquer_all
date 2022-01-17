@@ -19,25 +19,32 @@ for (let contKey in Contintents){
 }
 
 function incrementArmy(G, ctx, stateKey, contKey) {
-    G.MapState[contKey]["states"][stateKey].army += 1
+    G.MapState[contKey]["states"][stateKey].army += 1;
 }
 
 function IsVictory() {
     return false;
 }
 
-function PutArmy(G, ctx) {
-
+function PutArmy(G, ctx, stateKey, contKey) {
+    incrementArmy(G, ctx, stateKey, contKey)
 }
 
-function PlayCard(G, ctx) {
-    
+function endPlaceArmies(G) {
+    let isFinished = true;
+    for (let playerKey in G.Players) {
+        let player = G.Players[playerKey];
+        if (player.armies !== 0) {
+            isFinished = false;
+        }
+    }
+    return isFinished;
 }
 
 export const Conquer = {
     setup: () => ({ 
         MapState: MapState,
-        Player: {
+        Players: {
             "0":{
                 armies: 10
             },
@@ -52,14 +59,14 @@ export const Conquer = {
     phases: {
         placeArmies: {
             moves: { PutArmy },
-            endIf: G => (G.deck <= 0),
+            endIf: G => ( endPlaceArmies(G) ),
             turn: { minMoves: 1, maxMoves: 1 },
             start: true,
             next: 'play',
         },
 
         play: {
-            moves: { PlayCard },
+            moves: {  },
         },
     },
 
