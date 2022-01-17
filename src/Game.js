@@ -1,21 +1,40 @@
 import { INVALID_MOVE } from 'boardgame.io/core';
 import { Contintents } from "./Map";
 
-var MapState = {};
-for (let contKey in Contintents){
-    MapState[contKey] = {
-        "states": {}
-    };
-    
-    for (let stateKey in Contintents[contKey]["states"]){
-        let state = Contintents[contKey][stateKey];
-        MapState[contKey]["states"][stateKey] = {
-            country: stateKey,
-            continent: contKey,
-            army: 1,
-            playerID: null
+function setupMapState(ctx) {
+    var i = 0;
+    var len = ctx.playOrder.length;
+
+    var MapState = {};
+    for (let contKey in Contintents){
+        MapState[contKey] = {
+            "states": {}
         };
     }
+
+    let states = []
+    for (let contKey in Contintents) {
+        let stats = Contintents[contKey].states
+        var list = Object.keys(stats)
+            .map(function (key) {
+                return stats[key];
+            });
+        states = states.concat(list);
+    }
+
+    while (states.length) {
+        let state = states.splice(states.length * Math.random() | 0, 1)[0];
+
+        MapState[state.continent]["states"][state.country] = {
+            country: state.country,
+            continent: state.continent,
+            army: 1,
+            playerID: ctx.playOrder[i % len]
+        };
+        i += 1;
+    }
+
+    return MapState;
 }
 
 function incrementArmy(G, ctx, stateKey, contKey) {
@@ -42,8 +61,8 @@ function endPlaceArmies(G) {
 }
 
 export const Conquer = {
-    setup: () => ({ 
-        MapState: MapState,
+    setup: (ctx) => ({ 
+        MapState: setupMapState(ctx),
         Players: {
             "0":{
                 armies: 10
