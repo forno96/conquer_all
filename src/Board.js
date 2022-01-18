@@ -9,6 +9,9 @@ export class ConquerBoard extends React.Component {
         let ret = "hsl(" + H + ", " + S + "%, " + L + "%)";
         return ret;
     }
+    getState(continentKey, stateKey){
+        return this.props.G.MapState[continentKey].states[stateKey]
+    }
 
     onClick(state, currentPlayer) {
         console.log("Player click " + state.country);
@@ -16,27 +19,24 @@ export class ConquerBoard extends React.Component {
     }
     onMouseOver(state, player) {
         document.getElementById(state.country).style.fill = this.getHSL(player.hslColor, "highlight");
-        // document.getElementById("countyLabel").textContent = state.country;
         
-        // document.getElementById("countryConnections").textContent = Array.from(state.connections).join(', ');
-        /*
         state.connections.forEach((connection)=>{
-            document.getElementById(connection).style.fill = "#7a7a7a";
+            document.getElementById(connection.stateKey).style.fill = this.getHSL(
+                this.props.G.Players[this.getState(connection.contKey, connection.stateKey).playerID].hslColor,
+                "light"
+            );
         })
-        */
     }
     onMouseOut(state, player) {
         document.getElementById(state.country).style.fill = this.getHSL(player.hslColor);
-        /*
-        document.getElementById(state.country).style.fill = ""
+        
         if ("connections" in state) {
-            // document.getElementById("countryConnections").textContent = Array.from(state.connections).join(', ');
             state.connections.forEach((connection) => {
-                document.getElementById(connection).style.fill = "";
+                document.getElementById(connection.stateKey).style.fill = this.getHSL(
+                    this.props.G.Players[this.getState(connection.contKey, connection.stateKey).playerID].hslColor
+                )
             })
-        }
-        */
-        //document.getElementById("countyLabel").textContent = "";
+        }        
     }
     
     render() {

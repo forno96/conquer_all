@@ -541,16 +541,27 @@ const Connection = [
     },
 ]
 
-var connections = "connections"
-function addConnection(stateA, stateB){
+function findContintentKey(stateKey) {
     for (let contintentKey in Contintents) {
         let contintent = Contintents[contintentKey]
-        if (stateA in contintent.states) {
-            let state = contintent.states[stateA];
-            if (!(connections in state)) {
-                state[connections] = new Set();
+        if (stateKey in contintent.states) {
+            return contintentKey
+        }
+    }
+}
+
+function addConnection(stateAkey, stateBtag){
+    for (let contintentKey in Contintents) {
+        let contintent = Contintents[contintentKey]
+        if (stateAkey in contintent.states) {
+            let state = contintent.states[stateAkey];
+            if (!("connections" in state)) {
+                state["connections"] = new Set();
             }
-            state[connections].add(stateB)
+            state["connections"].add({
+                stateKey: stateBtag,
+                contKey: findContintentKey(stateBtag)
+            })
         }
     }
 }
