@@ -8,6 +8,7 @@ const ConquerClient = Client({
   game: Conquer,
   board: ConquerBoard,
   multiplayer: SocketIO({ server: 'localhost:8000' }),
+  numPlayers: 7,
 });
 
 const App = () => (

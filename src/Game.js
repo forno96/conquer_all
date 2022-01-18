@@ -75,6 +75,31 @@ export const Conquer = {
                 id: "1",
                 armies: 10,
                 hslColor: 199
+            },
+            "2":{
+                id: "2",
+                armies: 10,
+                hslColor: 1
+            },
+            "3":{
+                id: "3",
+                armies: 10,
+                hslColor: 118
+            },
+            "4":{
+                id: "4",
+                armies: 10,
+                hslColor: 61
+            },
+            "5":{
+                id: "5",
+                armies: 10,
+                hslColor: 293
+            },
+            "6":{
+                id: "6",
+                armies: 10,
+                hslColor: 165
             }
         },
         HSL: {
