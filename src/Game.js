@@ -65,10 +65,22 @@ export const Conquer = {
         MapState: setupMapState(ctx),
         Players: {
             "0":{
-                armies: 10
+                armies: 10,
+                hslColor: 265
             },
             "1":{
-                armies: 10
+                armies: 10,
+                hslColor: 199
+            }
+        },
+        HSL: {
+            normal: {
+                S: 78,
+                L: 83
+            },
+            highlight: {
+                S: 78,
+                L: 59
             }
         }
     }),

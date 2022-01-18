@@ -3,20 +3,31 @@ import { Contintents, Lines } from "./Map";
 
 export class ConquerBoard extends React.Component {
 
+    getHSL(H, mode="normal") {
+        let S = this.props.G.HSL[mode].S;
+        let L = this.props.G.HSL[mode].L;
+        let ret = "hsl(" + H + ", " + S + "%, " + L + "%)";
+        return ret;
+    }
+
     onClick(state) {
         console.log("Player click " + state.country);
         this.props.moves.PutArmy(state.country, state.continent);
     }
-    onMouseOver(state){
-        document.getElementById(state.country).style.fill = "#FFFFFF";
+    onMouseOver(state, player) {
+        document.getElementById(state.country).style.fill = this.getHSL(player.hslColor, "highlight");
         // document.getElementById("countyLabel").textContent = state.country;
         
         // document.getElementById("countryConnections").textContent = Array.from(state.connections).join(', ');
+        /*
         state.connections.forEach((connection)=>{
             document.getElementById(connection).style.fill = "#7a7a7a";
         })
+        */
     }
-    onMouseOut(state){
+    onMouseOut(state, player) {
+        document.getElementById(state.country).style.fill = this.getHSL(player.hslColor);
+        /*
         document.getElementById(state.country).style.fill = ""
         if ("connections" in state) {
             // document.getElementById("countryConnections").textContent = Array.from(state.connections).join(', ');
@@ -24,10 +35,13 @@ export class ConquerBoard extends React.Component {
                 document.getElementById(connection).style.fill = "";
             })
         }
+        */
         //document.getElementById("countyLabel").textContent = "";
     }
     
     render() {
+        this.getHSL(21);
+
         let conts = [];
         let armies = [];
         for (let cont in Contintents) {
@@ -35,9 +49,19 @@ export class ConquerBoard extends React.Component {
             let i = 0;
             for (let stateKey in Contintents[cont].states){
                 let state = Contintents[cont].states[stateKey];
-
+                let player = this.props.G.Players[this.props.G.MapState[cont].states[stateKey].playerID]
                 tmp.push(
-                    <path className='country' id={stateKey} d={state.geometry} onClick={() => this.onClick(state)} onMouseOver={() => this.onMouseOver(state)} onMouseOut={() => this.onMouseOut(state)} />
+                    <path
+                        className='country'
+                        id={stateKey}
+                        d={state.geometry}
+                        style={{
+                            "fill": this.getHSL(player.hslColor)
+                        }}
+                        onClick={() => this.onClick(state)}
+                        onMouseOver={() => this.onMouseOver(state, player)}
+                        onMouseOut={() => this.onMouseOut(state, player)}
+                    />
                 );
                 armies.push(
                     <text 
@@ -55,10 +79,10 @@ export class ConquerBoard extends React.Component {
                             "strokeLinejoin": "miter"
                         }}
                         onClick={() => this.onClick(state)}
-                        onMouseOver={() => this.onMouseOver(state)}
-                        onMouseOut={() => this.onMouseOut(state)}>
+                        onMouseOver={() => this.onMouseOver(state, player)}
+                        onMouseOut={() => this.onMouseOut(state, player)}>
 
-                        {this.props.G.MapState[cont].states[stateKey].army }
+                        { this.props.G.MapState[cont].states[stateKey].army }
 
                     </text>
                 );
