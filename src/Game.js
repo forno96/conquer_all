@@ -37,16 +37,18 @@ function setupMapState(ctx) {
     return MapState;
 }
 
-function incrementArmy(G, ctx, stateKey, contKey) {
-    G.MapState[contKey]["states"][stateKey].army += 1;
-}
-
 function IsVictory() {
     return false;
 }
 
-function PutArmy(G, ctx, stateKey, contKey) {
-    incrementArmy(G, ctx, stateKey, contKey)
+function PutArmy(G, ctx, stateKey, contKey, currentPlayer) {
+    let state = G.MapState[contKey]["states"][stateKey];
+    if (currentPlayer.id != state.playerID){
+        return INVALID_MOVE;
+    }
+    else {
+        state.army += 1;
+    }
 }
 
 function endPlaceArmies(G) {
@@ -65,10 +67,12 @@ export const Conquer = {
         MapState: setupMapState(ctx),
         Players: {
             "0":{
+                id: "0",
                 armies: 10,
                 hslColor: 265
             },
             "1":{
+                id: "1",
                 armies: 10,
                 hslColor: 199
             }
@@ -81,6 +85,10 @@ export const Conquer = {
             highlight: {
                 S: 78,
                 L: 59
+            },
+            light: {
+                S: 78,
+                L: 90
             }
         }
     }),

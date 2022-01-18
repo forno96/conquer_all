@@ -10,9 +10,9 @@ export class ConquerBoard extends React.Component {
         return ret;
     }
 
-    onClick(state) {
+    onClick(state, currentPlayer) {
         console.log("Player click " + state.country);
-        this.props.moves.PutArmy(state.country, state.continent);
+        this.props.moves.PutArmy(state.country, state.continent, currentPlayer);
     }
     onMouseOver(state, player) {
         document.getElementById(state.country).style.fill = this.getHSL(player.hslColor, "highlight");
@@ -40,16 +40,14 @@ export class ConquerBoard extends React.Component {
     }
     
     render() {
-        this.getHSL(21);
-
         let conts = [];
         let armies = [];
         for (let cont in Contintents) {
             let tmp = [];
-            let i = 0;
             for (let stateKey in Contintents[cont].states){
                 let state = Contintents[cont].states[stateKey];
-                let player = this.props.G.Players[this.props.G.MapState[cont].states[stateKey].playerID]
+                let player = this.props.G.Players[this.props.G.MapState[cont].states[stateKey].playerID];
+                let currentPlayer = this.props.G.Players[this.props.ctx.currentPlayer];
                 tmp.push(
                     <path
                         className='country'
@@ -58,7 +56,7 @@ export class ConquerBoard extends React.Component {
                         style={{
                             "fill": this.getHSL(player.hslColor)
                         }}
-                        onClick={() => this.onClick(state)}
+                        onClick={() => this.onClick(state, currentPlayer)}
                         onMouseOver={() => this.onMouseOver(state, player)}
                         onMouseOut={() => this.onMouseOut(state, player)}
                     />
@@ -78,7 +76,7 @@ export class ConquerBoard extends React.Component {
                             "strokeLinecap": "butt",
                             "strokeLinejoin": "miter"
                         }}
-                        onClick={() => this.onClick(state)}
+                        onClick={() => this.onClick(state, currentPlayer)}
                         onMouseOver={() => this.onMouseOver(state, player)}
                         onMouseOut={() => this.onMouseOut(state, player)}>
 
@@ -86,7 +84,6 @@ export class ConquerBoard extends React.Component {
 
                     </text>
                 );
-                i++;
             };
             conts.push(
                 <g id={cont} stroke={Contintents[cont].stroke} fill="#E5E5E5">
@@ -106,18 +103,33 @@ export class ConquerBoard extends React.Component {
         
         let playComponent = [];
         for (let i in this.props.ctx.playOrder){
+            let player = this.props.G.Players[this.props.ctx.playOrder[i]];
             let el = null;
             if (i == this.props.ctx.playOrderPos) {
-                el = <span className="tag is-large is-info" id={"player_turn_" + i}>{i}</span>
+                el = <span
+                    className="tag is-large"
+                    id={"player_turn_" + i}
+                    style={{
+                        backgroundColor: this.getHSL(player.hslColor, "highlight"),
+                        color: this.getHSL(player.hslColor, "light")
+                    }}
+                    >{i}</span>
             }
             else {
-                el = <span className="tag is-large is-info is-light" id={"player_turn_" + i}>{i}</span>
+                el = <span
+                    className="tag is-large"
+                    id={"player_turn_" + i}
+                    style={{
+                        backgroundColor: this.getHSL(player.hslColor, "light"),
+                        color: this.getHSL(player.hslColor, "highlight")
+                    }}
+                    >{i}</span>
             }
             playComponent.push(el);
         }
 
         let message = "";
-        if (this.props.ctx.phase == "placeArmies"){
+        if (this.props.ctx.phase === "placeArmies"){
             if (this.props.ctx.playOrderPos == this.props.playerID) {
                 message = "Put one army on one of your country"
             }
@@ -169,6 +181,7 @@ export class ConquerBoard extends React.Component {
     }
 }
 
+/*
 function getDataFormSVG(){
     let world = {}
     for (let i in document.children[0].children) {
@@ -190,4 +203,4 @@ function getDataFormSVG(){
         }
     }
 }
-
+*/
