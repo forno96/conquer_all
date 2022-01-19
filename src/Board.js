@@ -40,8 +40,13 @@ export class ConquerBoard extends React.Component {
     }
     
     render() {
+        let legendY = 665;
+        let legendX = 1;
+        let legendDot = 0.5;
+
         let conts = [];
         let armies = [];
+        let legend = [];
         for (let cont in Contintents) {
             let tmp = [];
             for (let stateKey in Contintents[cont].states){
@@ -90,6 +95,14 @@ export class ConquerBoard extends React.Component {
                     {tmp}
                 </g>
             );
+
+            legend.push(
+                <g>
+                    <circle cx={legendX + "em"} cy={legendY} r={legendDot + "em"} stroke="black" stroke-width="1" fill={Contintents[cont].stroke} />
+                    <text x={(legendX + legendDot + 0.3) + "em"} y={legendY + 5} fill="#757575" style={{ "fontFamily": "Roboto Mono", "fontSize": "1em" }}>{cont} {Contintents[cont].value}</text>
+                </g>
+            );
+            legendX = legendX + legendDot + Contintents[cont].labelSize;
         }
 
         //console.log(Lines)
@@ -155,11 +168,12 @@ export class ConquerBoard extends React.Component {
                 <div className="columns">
                     <div className="column is-9">
                         <div className="box">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1035 660">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1035 680">
                                 <g id="map" visibility="visible" fill="none" strokeWidth="2.5">
                                     {conntectedLines}
                                     {conts}
                                     {armies}
+                                    {legend}
                                 </g>
                             </svg>
                         </div>

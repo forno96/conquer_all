@@ -8,7 +8,8 @@ function setupMapState(ctx) {
     var MapState = {};
     for (let contKey in Contintents){
         MapState[contKey] = {
-            "states": {}
+            states: {},
+            value: Contintents[contKey].value
         };
     }
 
