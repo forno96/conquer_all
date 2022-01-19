@@ -60,8 +60,12 @@ function PutArmy(G, ctx, stateKey, contKey, currentPlayer) {
     if (currentPlayer.id != state.playerID){
         return INVALID_MOVE;
     }
-    else {
+    else if (G.Players[state.playerID].armies > 0) {
         state.army += 1;
+        G.Players[state.playerID].armies -= 1;
+    }
+    else {
+        return INVALID_MOVE;
     }
 }
 
